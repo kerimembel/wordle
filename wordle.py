@@ -1,10 +1,10 @@
 from random import choice
-from reader import get_available_words
-from writer import record_current_word
-from validator import validate_word
+from module.reader import get_available_words
+from module.writer import record_current_word
+from module.validator import validate_word
 from time import time
 from config import CHOSEN_WORD, FINISH_GAME, NOT_EXIST, CORRECT_PLACE, WRONG_PLACE, YOU_LOST, YOU_WON, TRY_AGAIN
-from letter import Letter
+from model.letter import Letter
 
 class Wordle():
 
@@ -17,7 +17,7 @@ class Wordle():
         words = get_available_words()
         chosen_word = choice(words)
         record_current_word(chosen_word)
-        print(CHOSEN_WORD.format(chosen_word))
+        #print(CHOSEN_WORD.format(chosen_word))
         return chosen_word.lower()
 
     def analyze_word(self, word):
@@ -26,11 +26,11 @@ class Wordle():
         for i in range(len(word)):
             if word[i] in self.chosen_word:
                 if(self.chosen_word[i] == word[i]):
-                    word_analyze.append(Letter(word[i],CORRECT_PLACE, i))
+                    word_analyze.append(Letter(word[i],CORRECT_PLACE, i).toJson())
                 else:
-                    word_analyze.append(Letter(word[i],WRONG_PLACE, i))
+                    word_analyze.append(Letter(word[i],WRONG_PLACE, i).toJson())
             else:
-                word_analyze.append(Letter(word[i], NOT_EXIST))
+                word_analyze.append(Letter(word[i], NOT_EXIST).toJson())
         return word_analyze
 
 

@@ -1,5 +1,5 @@
 from config import NOT_EXIST, CORRECT_PLACE, WRONG_PLACE, bcolors
-
+import json
 
 class Letter:
     def __init__(self, value, status, index=-1):
@@ -16,3 +16,6 @@ class Letter:
             return bcolors.OKGREEN + self.value + bcolors.ENDC
         else:
             return self.value
+
+    def toJson(self):
+        return json.dumps(self, default=lambda o: o.__dict__)

@@ -1,7 +1,7 @@
 from random import choice
 from wordle import Wordle
-from reader import get_words
-from time import sleep, time
+from module.reader import get_words
+from time import time
 from config import CORRECT_PLACE, BOT_GUESSED_WORD, WRONG_PLACE, NOT_EXIST, YOU_LOST, YOU_WON, TRY_AGAIN
 
 class WordleBot:
@@ -59,7 +59,7 @@ class WordleBot:
     def simulate_game(self):
         guessed_word = self.choose_word()
         print(BOT_GUESSED_WORD.format(guessed_word))
-        sleep(0.5)
+
         while(True):
             if guessed_word == self.game.chosen_word:
                 print(YOU_WON)
@@ -78,7 +78,6 @@ class WordleBot:
 
             guessed_word = self.choose_word(new_list)
             print(BOT_GUESSED_WORD.format(guessed_word))
-            sleep(0.5)
 
 
 def bot_game():
