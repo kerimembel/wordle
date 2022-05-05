@@ -18,4 +18,4 @@ class Letter:
             return self.value
 
     def toJson(self):
-        return json.dumps(self, default=lambda o: o.__dict__, ensure_ascii=False, indent=4)
+        return json.dumps(self.__dict__)

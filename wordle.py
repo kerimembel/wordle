@@ -16,7 +16,7 @@ class Wordle():
         self.start_time = time()
         self.selected_word = self.db.select_todays_word()
         self.chosen_word = self.choose_word()
-
+        self.words =  self.db.select_words()
     
     #This method is used to choose a word from the available words
     def choose_word(self):
@@ -30,6 +30,19 @@ class Wordle():
 
         return chosen_word.lower()
 
+    def validate_word(self, word):
+        word = word.lower()
+        if word in self.words:
+            return True
+        
+        return False
+    
+    def add_highscore(self, username, highscore):
+        self.db.insert_highscore(username, highscore)
+
+    def get_highscores(self):
+        return self.db.select_highscore()
+
     def analyze_word(self, word):
         word = word.lower()
         word_analyze = []
@@ -42,7 +55,6 @@ class Wordle():
             else:
                 word_analyze.append(Letter(word[i], NOT_EXIST).toJson())
         return word_analyze
-
 
     def print_analyze(self, analyze):
         for letter in analyze:
@@ -79,8 +91,6 @@ class Wordle():
                 self.finish_game()
                 break
 
-
-        
 def main():
     game = Wordle()
     game.run()
