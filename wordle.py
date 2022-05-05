@@ -3,21 +3,35 @@ from module.reader import get_available_words
 from module.writer import record_current_word
 from module.validator import validate_word
 from time import time
-from config import CHOSEN_WORD, FINISH_GAME, NOT_EXIST, CORRECT_PLACE, WRONG_PLACE, YOU_LOST, YOU_WON, TRY_AGAIN
+from config import  FINISH_GAME, NOT_EXIST, CORRECT_PLACE, WRONG_PLACE, YOU_LOST, YOU_WON, TRY_AGAIN
 from model.letter import Letter
+from module.mysql_db import WordleDB
+from pymysql.err import IntegrityError
 
+'''
+    This class is used to create the game
+'''
 class Wordle():
 
     def __init__(self,chance_count=6):
-        self.chosen_word = self.choose_word()
+        self.db = WordleDB()
         self.chance_count = chance_count
         self.start_time = time()
+        self.selected_word = self.db.select_todays_word()
+        self.chosen_word = self.choose_word()
+
     
+    #This method is used to choose a word from the available words
     def choose_word(self):
-        words = get_available_words()
-        chosen_word = choice(words)
-        record_current_word(chosen_word)
-        #print(CHOSEN_WORD.format(chosen_word))
+        if(self.selected_word == None):
+        
+            words = get_available_words()
+            chosen_word = choice(words)
+            self.db.insert_todays_word(chosen_word)
+            record_current_word(chosen_word)
+        else:
+            chosen_word = str(self.selected_word[0])
+
         return chosen_word.lower()
 
     def analyze_word(self, word):

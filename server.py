@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request
 from model.rest_response import WordResponse, AnalyzeResponse
 from wordle import Wordle
 from module.validator import api_validate_word
