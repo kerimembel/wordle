@@ -28,7 +28,7 @@ def add_highscore():
 
     data = request.get_json()
     username = data['username']
-    score = data['score']
+    score = float(data['score'])
 
     wordle.add_highscore(username, score)
     response = HighScoreResponse(True, score, username)

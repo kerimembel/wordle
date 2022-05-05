@@ -38,7 +38,7 @@ class HighScoreResponse(RestResponse):
         self.username = username
 
     def toJson(self):
-        return json.dumps(self.__dict, ensure_ascii=False)
+        return json.dumps(self.__dict__, ensure_ascii=False)
 
 class HighScoreListResponse(RestResponse):
     def __init__(self, status, highscore_list):
@@ -46,4 +46,4 @@ class HighScoreListResponse(RestResponse):
         self.highscore_list = highscore_list
 
     def toJson(self):
-        return json.dumps(self.__dict__)
+        return json.dumps(self.__dict__, ensure_ascii=False)
