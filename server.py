@@ -33,5 +33,4 @@ def analyze_word():
 
     return response.toJson()
     
-
 app.run(port=9000)

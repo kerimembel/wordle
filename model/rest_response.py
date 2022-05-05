@@ -5,7 +5,7 @@ class RestResponse:
         self.status = status
 
     def toJson(self):
-        return json.dumps(self, default=lambda o: o.__dict__,indent=4)
+        return json.dumps(self, default=lambda o: o.__dict__,indent=4, ensure_ascii=False)
 
 class AnalyzeResponse(RestResponse):
     def __init__(self, status, analyze):
@@ -13,7 +13,7 @@ class AnalyzeResponse(RestResponse):
         self.analyze = analyze
 
     def toJson(self):
-        return json.dumps(self, default=lambda o: o.__dict__, indent=8)
+        return json.dumps(self, default=lambda o: o.__dict__, indent=8, ensure_ascii=False)
 
 class WordResponse(RestResponse):
     def __init__(self, status, word):
@@ -21,4 +21,4 @@ class WordResponse(RestResponse):
         self.word = word
 
     def toJson(self):
-        return json.dumps(self, default=lambda o: o.__dict__,indent=4)
+        return json.dumps(self, default=lambda o: o.__dict__,indent=4, ensure_ascii=False)

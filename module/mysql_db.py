@@ -29,10 +29,31 @@ class WordleDB():
 
   #This method is used to insert the scores of the user into the database  
   def insert_highscore(self, name, score):
-
     cur = self.conn.cursor()
     cur.execute("INSERT INTO high_score (name, score, date) VALUES (%s, %s, CURDATE())", (name, score))
     self.conn.commit()
+
+  #This method is used to insert word into the database
+  def insert_word(self, word):
+    cur = self.conn.cursor()
+    try:
+      cur.execute("INSERT INTO words (word) VALUES (%s)", (word,))
+    except pymysql.err.IntegrityError:
+      print("Word already exists")
+      pass
+    self.conn.commit()
+
+  #This method is used to update the status of the word to 1
+  def update_available_words(self, word):
+    cur = self.conn.cursor()
+    cur.execute("UPDATE words SET status = 1 WHERE word = %s", (word,))
+    self.conn.commit()
+    
+  #This method is used to select the available words from the database
+  def select_available_words(self):
+    cur = self.conn.cursor()
+    cur.execute("SELECT word FROM words WHERE status = 0")
+    return list(cur.fetchall())
 
   def close(self):
     self.conn.close()

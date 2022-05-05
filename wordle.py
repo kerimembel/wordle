@@ -1,12 +1,9 @@
 from random import choice
-from module.reader import get_available_words
-from module.writer import record_current_word
 from module.validator import validate_word
 from time import time
 from config import  FINISH_GAME, NOT_EXIST, CORRECT_PLACE, WRONG_PLACE, YOU_LOST, YOU_WON, TRY_AGAIN
 from model.letter import Letter
 from module.mysql_db import WordleDB
-from pymysql.err import IntegrityError
 
 '''
     This class is used to create the game
@@ -24,11 +21,10 @@ class Wordle():
     #This method is used to choose a word from the available words
     def choose_word(self):
         if(self.selected_word == None):
-        
-            words = get_available_words()
-            chosen_word = choice(words)
+            words = self.db.select_available_words()
+            chosen_word = str(choice(words)[0])
             self.db.insert_todays_word(chosen_word)
-            record_current_word(chosen_word)
+            self.db.update_available_words(chosen_word)
         else:
             chosen_word = str(self.selected_word[0])
 
