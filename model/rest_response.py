@@ -4,9 +4,6 @@ class RestResponse:
     def __init__(self, status):
         self.status = status
 
-    def toJson(self):
-        return json.dumps(self.__dict__, ensure_ascii=False)
-
 class AnalyzeResponse(RestResponse):
     def __init__(self, status, analyze):
         super().__init__(status)
@@ -20,30 +17,18 @@ class WordResponse(RestResponse):
         super().__init__(status)
         self.word = word
 
-    def toJson(self):
-        return json.dumps(self.__dict__, ensure_ascii=False)
-
 class ValidateResponse(RestResponse):
     def __init__(self, status, word):
         super().__init__(status)
         self.word = word
 
-    def toJson(self):
-        return json.dumps(self.__dict__, ensure_ascii=False)
-
 class HighScoreResponse(RestResponse):
-    def __init__(self, status, highscore, username):
+    def __init__(self, status, message="ok"):
         super().__init__(status)
-        self.highscore = highscore
-        self.username = username
-
-    def toJson(self):
-        return json.dumps(self.__dict__, ensure_ascii=False)
+        self.message = message
 
 class HighScoreListResponse(RestResponse):
-    def __init__(self, status, highscore_list):
+    def __init__(self, status, highscore_list, message="ok"):
         super().__init__(status)
+        self.message = message
         self.highscore_list = highscore_list
-
-    def toJson(self):
-        return json.dumps(self.__dict__, ensure_ascii=False)

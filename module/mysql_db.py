@@ -30,8 +30,13 @@ class WordleDB():
   	#This method is used to insert the scores of the user into the database
 	def insert_highscore(self, username, score):
 		cur = self.conn.cursor()
-		cur.execute("INSERT INTO high_score (username, score, date) VALUES (%s, %s, CURDATE())", (username, score))
-		self.conn.commit()
+		try:
+			cur.execute("INSERT INTO high_score (username, score, date) VALUES (%s, %s, CURDATE())", (username, score))
+			self.conn.commit()
+			return True
+		except pymysql.err.IntegrityError:
+			print("This user already has a highscore")
+			return False
 
 	#This method is used to select the highscores from the database
 	def select_highscore(self):

@@ -1,5 +1,4 @@
-from time import sleep
-from flask import Flask, request
+from flask import Flask, jsonify, request
 from model.rest_response import HighScoreListResponse, HighScoreResponse, ValidateResponse, WordResponse, AnalyzeResponse
 from wordle import Wordle
 from module.validator import api_validate_word
@@ -15,13 +14,13 @@ def home():
 @app.route('/todays-word', methods=['GET'])
 def get_word():
     response = WordResponse(True, wordle.chosen_word)
-    return response.toJson()
+    return jsonify(response.__dict__)
 
 @app.route('/validate-word', methods=['GET'])
 def validate_word():
     word = request.args.get('word')
     response = ValidateResponse(wordle.validate_word(word), word)
-    return response.toJson()
+    return jsonify(response)
 
 @app.route('/highscore', methods=['POST'])
 def add_highscore():
@@ -30,15 +29,18 @@ def add_highscore():
     username = data['username']
     score = float(data['score'])
 
-    wordle.add_highscore(username, score)
-    response = HighScoreResponse(True, score, username)
-    return response.toJson()
+    if not wordle.add_highscore(username, score):
+        response = HighScoreResponse(False, "This user already has a highscore")
+    else:
+        response = HighScoreResponse(True)
+
+    return jsonify(response.__dict__)
 
 
 @app.route('/highscore', methods=['GET'])
 def get_highscores():
     response = HighScoreListResponse(True, wordle.get_highscores())
-    return response.toJson()
+    return jsonify(response.__dict__)
 
 @app.route('/analyze-word', methods=['GET'])
 def analyze_word():
@@ -50,8 +52,6 @@ def analyze_word():
     else:
         word_analyze = wordle.analyze_word(word)
         response = AnalyzeResponse(True, word_analyze)
-        for analyze in word_analyze:
-            print(analyze)
 
     return response.toJson()
 

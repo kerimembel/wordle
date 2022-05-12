@@ -38,7 +38,7 @@ class Wordle():
         return False
     
     def add_highscore(self, username, highscore):
-        self.db.insert_highscore(username, highscore)
+        return self.db.insert_highscore(username, highscore)
 
     def get_highscores(self):
         return self.db.select_highscore()
