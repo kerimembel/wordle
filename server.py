@@ -34,7 +34,7 @@ def get_word():
 def validate_word():
     word = request.args.get('word')
     response = ValidateResponse(wordle.validate_word(word), word)
-    return jsonify(response)
+    return jsonify(response.__dict__)
 
 @app.route('/highscore', methods=['POST'])
 @auth.login_required
