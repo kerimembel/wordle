@@ -39,7 +39,7 @@ class WordleDB():
 	#This method is used to select the highscores from the database
 	def select_highscore(self):
 		cur = self.conn.cursor()
-		cur.execute("SELECT username, score FROM high_score WHERE date = CURDATE() ORDER BY score ASC")
+		cur.execute("SELECT username, score FROM high_score WHERE date = CURDATE() ORDER BY score ASC LIMIT 10")
 		return list(cur.fetchall())
 
   #This method is used to insert word into the database
