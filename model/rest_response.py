@@ -22,11 +22,6 @@ class WordsResponse(RestResponse):
         super().__init__(status)
         self.words = words
 
-class ValidateResponse(RestResponse):
-    def __init__(self, status, word):
-        super().__init__(status)
-        self.word = word
-
 class HighScoreResponse(RestResponse):
     def __init__(self, status, message="ok"):
         super().__init__(status)
