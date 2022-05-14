@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from model.rest_response import HighScoreListResponse, HighScoreResponse, ValidateResponse, WordResponse, AnalyzeResponse
+from model.rest_response import HighScoreListResponse, HighScoreResponse, ValidateResponse, WordResponse, AnalyzeResponse, WordsResponse
 from wordle import Wordle
 from module.validator import api_validate_word
 from module.environment import get_env
@@ -27,6 +27,12 @@ def verify_password(username, password):
 @auth.login_required
 def get_word():
     response = WordResponse(True, wordle.chosen_word)
+    return jsonify(response.__dict__)
+
+@app.route('/get-words', methods=['GET'])
+@auth.login_required
+def get_words():
+    response = WordsResponse(True, list(wordle.words.keys()))
     return jsonify(response.__dict__)
 
 @app.route('/validate-word', methods=['GET'])
