@@ -1,14 +1,20 @@
 from flask import Flask, jsonify, request
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.middleware.dispatcher import DispatcherMiddleware
+from werkzeug.wrappers import Response
 
 from rest_response import GetUsernameResponse, HighScoreListResponse, RestResponse, Status, WordResponse, WordsResponse
 from environment import get_env
 from wordle import Wordle
 
 app = Flask(__name__)
+app.config["DEBUG"] = "True"
 auth = HTTPBasicAuth()
-app.config["DEBUG"] = True
+app.wsgi_app = DispatcherMiddleware(
+    Response('Not Found', status=404),
+    {'/api/v0': app.wsgi_app}
+)
 wordle = Wordle()
 
 users = {
@@ -25,19 +31,19 @@ def verify_password(username, password):
 @app.route('/todays-word', methods=['GET'])
 @auth.login_required
 def get_word():
-    response = WordResponse(Status.OK, wordle.chosen_word)
+    response = WordResponse(word = wordle.chosen_word)
     return jsonify(response.__dict__)
 
 @app.route('/get-words', methods=['GET'])
 @auth.login_required
 def get_words():
-    response = WordsResponse(Status.OK, list(wordle.words.keys()))
+    response = WordsResponse(words = list(wordle.words.keys()))
     return jsonify(response.__dict__)
 
 @app.route('/highscore', methods=['GET'])
 @auth.login_required
 def get_highscores():
-    response = HighScoreListResponse(Status.OK, wordle.get_highscores())
+    response = HighScoreListResponse(highscore_list = wordle.get_highscores())
     return jsonify(response.__dict__)
 
 @app.route('/highscore', methods=['POST'])
@@ -114,4 +120,4 @@ def update_username():
         return jsonify(response.__dict__)
 
 
-app.run(port=9000, host='0.0.0.0')
+app.run(port=9000)
