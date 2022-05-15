@@ -11,11 +11,16 @@ from wordle import Wordle
 app = Flask(__name__)
 app.config["DEBUG"] = "True"
 auth = HTTPBasicAuth()
+wordle = Wordle()
 app.wsgi_app = DispatcherMiddleware(
-    Response('Not Found', status=404),
+    Response('NOT FOUND', status=404),
     {'/api/v0': app.wsgi_app}
 )
-wordle = Wordle()
+
+@app.errorhandler(404)
+def not_found(e):
+    response = RestResponse(Status.NOT_FOUND)
+    return jsonify(response.__dict__), 404
 
 users = {
     "kerim": generate_password_hash(get_env("PASSWORD_KERIM")),
