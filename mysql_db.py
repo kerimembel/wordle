@@ -13,6 +13,7 @@ class WordleDB():
 			password =  get_env("WORDLE_DB_PASSWORD"),
 			database =  get_env("WORDLE_DB_NAME")
 		)  
+		
 	#This method is used to insert todays word into the database
 	def insert_todays_word(self, word):
 		cur = self.conn.cursor()
@@ -73,6 +74,34 @@ class WordleDB():
 		for word in words:
 			word_dictionary[word[0]] = 0
 		return word_dictionary
+
+	#This method is used to get username from the database
+	def select_username(self, client_id):
+		cur = self.conn.cursor()
+		cur.execute("SELECT username FROM user WHERE client_id = %s", (client_id,))
+		return cur.fetchone()
+
+	#This method is user to register user into the database
+	def register_user(self, client_id, username=""):
+		cur = self.conn.cursor()
+		try:
+			cur.execute("INSERT INTO user (username, client_id, register_date) VALUES (%s, %s, CURDATE())", (username, client_id))
+			self.conn.commit()
+			return True
+		except pymysql.err.IntegrityError:
+			print("This client_id or username already exists")
+			return False
+
+	#This method is used to insert username into the database
+	def update_username(self, username, client_id):
+		cur = self.conn.cursor()
+		try:
+			cur.execute("UPDATE user SET username = %s WHERE client_id = %s", (username, client_id))
+			self.conn.commit()
+			return True
+		except pymysql.err.IntegrityError:
+			print("This username already exists")
+			return False
 
 	def close(self):
 		self.conn.close()

@@ -1,24 +1,32 @@
+
+class Status():
+    OK = 'SUCCESS'
+    ERROR = 'ERROR'
+    HIGHSCORE_EXISTS = 'HIGHSCORE_EXISTS'
+    CLIENT_ID_REQUIRED = 'CLIENT_ID_REQUIRED'
+    USERNAME_REQUIRED = 'USERNAME_REQUIRED'
+    USERNAME_EXISTS = 'USERNAME_EXISTS'
+    
 class RestResponse:
-    def __init__(self, status):
+    def __init__(self, status = Status.OK):
         self.status = status
 
 class WordResponse(RestResponse):
-    def __init__(self, status, word):
+    def __init__(self, status = Status.OK, word=""):
         super().__init__(status)
         self.word = word
         
 class WordsResponse(RestResponse):
-    def __init__(self, status, words):
+    def __init__(self, status = Status.OK, words=[]):
         super().__init__(status)
         self.words = words
 
-class HighScoreResponse(RestResponse):
-    def __init__(self, status, message="ok"):
-        super().__init__(status)
-        self.message = message
-
 class HighScoreListResponse(RestResponse):
-    def __init__(self, status, highscore_list, message="ok"):
+    def __init__(self, status = Status.OK, highscore_list=[]):
         super().__init__(status)
-        self.message = message
         self.highscore_list = highscore_list
+
+class GetUsernameResponse(RestResponse):
+    def __init__(self, status = Status.OK, username=""):
+        super().__init__(status)
+        self.username = username

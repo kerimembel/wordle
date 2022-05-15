@@ -36,3 +36,15 @@ class Wordle():
 
     def get_highscores(self):
         return self.db.select_highscore()
+
+    def get_username(self, client_id):
+        username = self.db.select_username(client_id)
+        if username:
+            return username[0]
+        return ""
+
+    def register_user(self, client_id, username):
+        return self.db.register_user(client_id, username)
+
+    def update_username(self, client_id, username):
+        return self.db.update_username(client_id, username)
