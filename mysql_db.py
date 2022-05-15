@@ -1,5 +1,5 @@
 import pymysql
-from .environment import get_env
+from environment import get_env
 
 '''
     This class is used to connect to the database and perform queries
