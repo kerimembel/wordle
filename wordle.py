@@ -1,4 +1,6 @@
+from datetime import datetime
 from random import choice
+from time import time
 from mysql_db import WordleDB
 
 '''
@@ -10,8 +12,8 @@ class Wordle():
         self.db = WordleDB()
         self.chance_count = chance_count
         self.selected_word = self.db.select_todays_word()
-        self.chosen_word = self.choose_word()
         self.words =  self.db.select_words()
+        self.choose_word()
     
     #This method is used to choose a word from the available words
     def choose_word(self):
@@ -23,7 +25,8 @@ class Wordle():
         else:
             chosen_word = str(self.selected_word[0])
 
-        return chosen_word.lower()
+        print(str(datetime.now()) + ": " + "Chosen word: " + chosen_word)
+        self.chosen_word = chosen_word.lower()
 
     def validate_word(self, word):
         word = word.lower()

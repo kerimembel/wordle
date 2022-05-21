@@ -3,7 +3,7 @@ from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from werkzeug.wrappers import Response
-
+from apscheduler.schedulers.background import BackgroundScheduler
 from rest_response import GetUsernameResponse, HighScoreListResponse, RestResponse, Status, WordResponse, WordsResponse
 from environment import get_env
 from wordle import Wordle
@@ -12,6 +12,11 @@ app = Flask(__name__)
 app.config["DEBUG"] = "True"
 auth = HTTPBasicAuth()
 wordle = Wordle()
+
+scheduled_word_chooser = BackgroundScheduler(daemon=True)
+scheduled_word_chooser.add_job(wordle.choose_word,'cron', hour = 0)
+scheduled_word_chooser.start()
+
 app.wsgi_app = DispatcherMiddleware(
     Response('NOT FOUND', status=404),
     {'/api/v0': app.wsgi_app}
